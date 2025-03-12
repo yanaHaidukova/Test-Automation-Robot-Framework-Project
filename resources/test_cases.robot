@@ -3,7 +3,7 @@ Library     SeleniumLibrary
 
 
 *** Keywords ***
-Verify user is navigated to "Test cases" page successfully
+Verify User Is Navigated To Test Cases Page Successfully
     [Arguments]  ${locator}  ${expected_text}
     Wait Until Element Is Visible  ${locator}
     ${header_text}=  Get Text  ${locator}

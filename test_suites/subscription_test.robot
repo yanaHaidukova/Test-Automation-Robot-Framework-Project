@@ -1,23 +1,23 @@
 *** Settings ***
-Resource    ../resources/created_keywrods.robot
-Resource    ../resources/common_keywords.robot
+Resource    ../resources/common_resources.robot
 Test Teardown   Close All Browsers
 
 #robot -d results test_suites/subscription_test.robot
 
 *** Variables ***
-${EMAIL_FIELD_SUBSCRIBE_ID} =  id=susbscribe_email
-${LOGGED_IN_USER_EMAIL} =  alexxx@gmail.com
+${EMAIL_FIELD_SUBSCRIBE_ID}    //*[@id="susbscribe_email"]
+${LOGGED_IN_USER_EMAIL}    alexxx@gmail.com
+${FOOTER_LOCATOR}    //*[@class="single-widget"]
+${SNACKBAR_LOCATOR}    //*[@id="success-subscribe"]
+${SUBSCRIBE_BUTTON}    //*[@id="subscribe"]
 
 *** Test Cases ***
-Test Case 10: Verify Subscription in home page
-    [Tags]  UI tests Part 1
-    Go to "Automation exercise" website
-    Resize browser window
-    Confirm cookies
-    Verify that home page is visible
-    Scroll the page down to the footer
-    Input valid email   ${EMAIL_FIELD_SUBSCRIBE_ID}   ${LOGGED_IN_USER_EMAIL}
-    Click "Subscribe" button
-    Verify that user is successfully subscribed
+Verify Subscription in home page
+    [Tags]  UI_tests_Part1
+    [Documentation]  This test case should verify if the user can subscribe for the updates
+    [Setup]  Go To Automation Exercise Home Page
+    Scroll Element Into View    ${FOOTER_LOCATOR}
+    Input Text    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
+    Click Button    ${SUBSCRIBE_BUTTON}
+    Verify that user is successfully subscribed    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
 
