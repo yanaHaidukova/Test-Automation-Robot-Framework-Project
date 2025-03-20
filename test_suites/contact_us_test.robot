@@ -10,7 +10,7 @@ ${EMAIL_CONTACT_ID}    //input[@name="email"]
 ${SUBJECT_FILED_ID}    //input[@name="subject"]
 ${MESSAGE_FIELD_ID}    //*[@id="message"]
 ${VALID_EMAIL}    evatestemail@gmail.com
-
+${RAW_FILE_PATH}    ${CURDIR}\\files\\understanding-abstract-art.jpg
 
 *** Test Cases ***
 Contact Us Form
@@ -21,7 +21,7 @@ Contact Us Form
     Input Text    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}
     Input Text    ${SUBJECT_FILED_ID}    Test subject
     Input Text    ${MESSAGE_FIELD_ID}    Message to contact us
-    Upload File     ${FILE_PATH}
+    Upload File    ${RAW_FILE_PATH}
     Verify Form Is Successfully Submited
 
 

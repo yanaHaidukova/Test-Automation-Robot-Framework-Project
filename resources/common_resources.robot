@@ -27,6 +27,7 @@ ${ACCOUNT_CREATED_ID}    //*[@id="form"]//h2[@data-qa="account-created"]
 ${HEADER_LOCATOR_DELETED}    //*[@class="title text-center"]
 ${HEADER_LOCATOR_PRODUCTS}    //h2[@class="title text-center"]
 ${EMAIL_CONTACT_ID}    //input[@name="email"]
+${FILE_PATH1}    ${CURDIR}\\files\\understanding-abstract-art.jpg
 ${UPLOAD_FILE_LOCATOR}    //input[@name="upload_file"]
 ${ERROR_INVALID_CREDENTIALS_ID}    //*[@id="form"]//p
 ${ERROR_INVALID_CREDENTIALS_TEXT}    Your email or password is incorrect!
@@ -122,11 +123,14 @@ Verify User Is Successfully Logged In
     Check Logged In As Username Link Is Visible    ${VALID_NAME}
 
 Choose And Upload File
-    Choose File    ${UPLOAD_FILE_LOCATOR}    ${FILE_PATH}
+    Choose File    ${UPLOAD_FILE_LOCATOR}    ${FILE_PATH1}
 
 Upload File
-    [Arguments]  ${file_path}
-    Choose File  ${UPLOAD_FILE_LOCATOR}  ${file_path}
+    [Arguments]  ${raw_file_path}
+    ${normalized_file_path}=  Replace String  ${raw_file_path}  \\  /
+    Log  Normalized File Path: ${normalized_file_path}
+    Choose File  ${UPLOAD_FILE_LOCATOR}  ${normalized_file_path}
+
 
 Verify Account Is Successfully Deleted
     [Arguments]  ${locator}  ${expected_text}
