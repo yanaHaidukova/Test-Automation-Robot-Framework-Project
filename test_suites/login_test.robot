@@ -1,14 +1,15 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
-Suite Teardown    Finish test
+Test Setup    Go To Automation Exercise Home Page
+Suite Teardown    Login And Delete Account    ${VALID_NAME}
 
 #robot -d results test_suites/login_test.robot
 
 *** Variables ***
 ${NAME_FIELD_ID}    //input[@name="name"]
-${VALID_NAME}    Eva
+${VALID_NAME}    Elen
 ${EMAIL_FIELD_ID}    //input[@name="email"][@data-qa="signup-email"]
-${VALID_EMAIL}    evatestemail@gmail.com
+${VALID_EMAIL}    Elentestemail@gmail.com
 ${HEADER_ACCOUNT_INFO}    //*[@class="login-form"]/h2
 ${EMAIL_FIELD_LOGIN_ID}    //input[@name="email"][@data-qa="login-email"]
 ${INVALID_USER_EMAIL}    hola@gmail.com
@@ -17,53 +18,49 @@ ${INVALID_PASSWORD}    invalidpass1
 ${CREATE_ACCOUNT_BUTTON}    //button[@type="submit"][@data-qa="create-account"]
 ${CONTINUE_BUTTON_ID}    //*[@class="btn btn-primary"]
 ${ERROR_EXISTING_USER_ID}    //*[@id="form"]//p
+${ACCOUNT_CREATED_ID}    //*[@id="form"]//h2[@data-qa="account-created"]
+${HEADER_LOCATOR_NEW_SIGNIN}    //*[@class="signup-form"]//h2
+${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
 
 *** Test Cases ***
 Register user
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify the ability of registering a new user
-    [Setup]  Go To Automation Exercise Home Page
-    Verify User Can Navigate To Sign Up Page
-    Verify User Can Input User Name And Email    ${VALID_NAME}    ${VALID_EMAIL}
-    Verify User Is Successfully Redirected To Enter Account Information Page    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
-    Verify User Can Enter Account Information
-    Verify User Can Sing Up for Newsletter
-    Verify User Can Enter Address Information
+    Check User Can Navigate To SignIn Page
+    Check User Can Input User Name And Email    ${NAME_FIELD_ID}    ${VALID_NAME}    ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
+    Click Button    ${SIGNUP_BUTTON}
+    Check User Is Successfully Redirected To Enter Account Information Page    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
+    Check User Can Enter Account Information
+    Check User Can Sing Up for Newsletter
+    Check User Can Enter Address Information
     Click Button    ${CREATE_ACCOUNT_BUTTON}
-    Verify Account Is Successfully Created
+    Wait Until Element Is Visible      ${ACCOUNT_CREATED_ID}
     Click Link    ${CONTINUE_BUTTON_ID}
-    Verify A New User Is Successfully Logged In
+    Check Logged In As Username Link Is Visible    ${VALID_NAME}
 
 Login User with correct email and password
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify if user with correct credentials can login
-    [Setup]  Go To Automation Exercise Home Page
-    Verify User Can Navigate To Login Page
-    Log In User To Application    ${VALID_EMAIL}    ${PASSWORD_VALUE}
-    Verify User Is Successfully Logged In
+    Check User Can Navigate To Login Page
+    Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}
 
 Login User with incorrect email and password
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify if user cannot login with incorrect credentials
-    [Setup]  Go To Automation Exercise Home Page
-    Verify User Can Navigate To Login Page
-    Log In User To Application    ${INVALID_USER_EMAIL}    ${INVALID_PASSWORD}
-    Verify User Cannot Login    ${ERROR_INVALID_CREDENTIALS_ID}    Your email or password is incorrect!
+    Check User Can Navigate To Login Page
+    Input Text    ${EMAIL_FIELD_LOGIN_ID}    ${INVALID_USER_EMAIL}
+    Input Text    ${INPUT_PASSWORD}    ${INVALID_PASSWORD}
+    Click Button  ${LOGIN_BUTTON_ID}
+    Check User Cannot Login With Invalid Credentials    ${ERROR_INVALID_CREDENTIALS_ID}    Your email or password is incorrect!
 
 Logout User
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify if user log out from the application
-    [Setup]  Go To Automation Exercise Home Page
-    Verify User Can Navigate To Login Page
-    Log In User To Application    ${VALID_EMAIL}    ${PASSWORD_VALUE}
-    Log Out User From Account
+    Check User Can Navigate To Login Page
+    Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}    ${VALID_NAME}
+    Check User Is Logged Out From Account
 
 Register User with existing email
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify if user cannot create an account with already existing credentials
-    [Setup]  Go To Automation Exercise Home Page
-    Verify User Can Navigate To Sign Up Page
-    Verify User Can Input User Name And Email    ${VALID_NAME}    ${VALID_EMAIL}
-    Verify User Cannot Create An Account    ${ERROR_EXISTING_USER_ID}    Email Address already exist!
+    Check User Can Navigate To SignIn Page
+    Check User Can Input User Name And Email    ${NAME_FIELD_ID}    ${VALID_NAME}    ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
+    Click Button    ${SIGNUP_BUTTON}
+    Check Account Already Exists    ${ERROR_EXISTING_USER_ID}    Email Address already exist!
 
 
