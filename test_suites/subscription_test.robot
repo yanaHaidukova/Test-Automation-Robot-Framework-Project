@@ -14,10 +14,9 @@ ${SUBSCRIBE_BUTTON}    //*[@id="subscribe"]
 *** Test Cases ***
 Verify Subscription in home page
     [Tags]  UI_tests_Part1
-    [Documentation]  This test case should verify if the user can subscribe for the updates
     [Setup]  Go To Automation Exercise Home Page
     Scroll Element Into View    ${FOOTER_LOCATOR}
     Input Text    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
     Click Button    ${SUBSCRIBE_BUTTON}
-    Verify that user is successfully subscribed    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
+    Check that user is successfully subscribed    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
 

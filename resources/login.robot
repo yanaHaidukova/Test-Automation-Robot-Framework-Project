@@ -14,11 +14,9 @@ ${YEAR_DROPDOWN}    //*[@id="years"]
 ${SIGNUP_CHECKBOX}    //*[@id="newsletter"]
 ${CONTINUE_BUTTON_ID}    //*[@class="btn btn-primary"]
 ${HEADER_LOCATOR_ACCOUNT_INFO}    //*[@class="login-form"]/h2
-${EXPECTED_HEADER_TEXT_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
 ${TITLE_RADIO_BUTTON}    title
 ${NAME_FIELD_POPULATED}    //input[@id="name"]
 ${EMAIL_FIELD_POPULATED}    //input[@id="email"]
-${EXPECTED_HEADER_TEXT_NEWSIGNIN}    New User Signup!
 ${LOGIN_BUTTON_ID}    //button[@type="submit"][@data-qa="login-button"]
 ${COMPANY_NAME_ID}    //*[@id="company"]
 ${STATE_ID}    //*[@id="state"]
@@ -28,7 +26,6 @@ ${ERROR_INVALID_CREDENTIALS_ID}    //p[contains(text(), 'Your email or password 
 ${ERROR_EXISTING_USER_ID}    //*[@id="form"]//p
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${LOGGEDIN_SUCCESS}    //*[@id="header"]//li[10]/a
-
 
 *** Keywords ***
 Check User Is Successfully Redirected To Enter Account Information Page

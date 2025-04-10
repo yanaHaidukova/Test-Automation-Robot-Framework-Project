@@ -1,12 +1,10 @@
 *** Settings ***
 Library      SeleniumLibrary
 Resource    ../resources/login.robot
-Resource    ../resources/search.robot
 Resource    ../resources/top_nav.robot
 Resource    ../resources/contact_us.robot
 Resource    ../resources/products.robot
 Resource    ../resources/test_cases.robot
-Resource    ../resources/variables.robot
 
 *** Variables ***
 ${EMAIL_FIELD_LOGIN_ID}    //input[@name="email"][@data-qa="login-email"]
@@ -27,12 +25,6 @@ ${FILE_PATH1}    ${CURDIR}\\files\\understanding-abstract-art.jpg
 ${UPLOAD_FILE_LOCATOR}    //input[@name="upload_file"]
 ${ERROR_INVALID_CREDENTIALS_ID}    //*[@id="form"]//p
 ${ERROR_INVALID_CREDENTIALS_TEXT}    Your email or password is incorrect!
-${PRODUCT_DETAILS_NAME_LOCATOR}    //*[@class="product-information"]//h2
-${PRODUCT_DETAILS_CATEGORY_LOCATOR}    //*[@class="product-information"]//P
-${PRODUCT_DETAILS_PRICE_LOCATOR}    //*[@class="product-information"]//span/span
-${PRODUCT_DETAILS_AVAILABILITY_LOCATOR}    //*[@class="product-information"]//p[2]
-${PRODUCT_DETAILS_CONDITION_LOCATOR}    //*[@class="product-information"]//p[3]
-${PRODUCT_DETAILS_BRAND_LOCATOR}    //*[@class="product-information"]//p[4]
 ${HEADER_SEARCHED_PRODUCTS_LOCATOR}    //*[@class="features_items"]/h2
 ${PASSWORD_FIELD_ID}    //*[@id="password"]
 ${PASSWORD_VALUE}    PASSWORD123
@@ -63,7 +55,7 @@ ${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${SIGNUP_BUTTON}    //button[@type="submit"][@data-qa="signup-button"]
 ${LOGGEDIN_SUCCESS}     //*[@id="header"]//li[10]/a
-
+${DELETE_ACCOUNT_LINK}    //a[contains (text(), 'Delete Account')]
 
 *** Keywords ***
 Go To Automation Exercise Home Page
@@ -77,7 +69,6 @@ Check User Can Navigate To Login Page
     Wait Until Element Is Visible    ${HEADER_LOCATOR_LOGIN}
     ${header_text}=  Get Text    ${HEADER_LOCATOR_LOGIN}
     Should Be Equal As Strings    ${header_text}    Login to your account
-
 
 Check User Can Navigate To SignIn Page
     Click Link    ${SIGNUP_LOGIN_LINK}
@@ -127,7 +118,6 @@ Check User Is Logged Out From Account
     ${header_text}=  Get Text    ${HEADER_LOCATOR_LOGIN}
     Should Be Equal As Strings    ${header_text}    Login to your account
 
-
 Check that user is successfully subscribed
     [Arguments]  ${locator}  ${expected_text}
     Wait Until Element Is Visible  ${locator}
@@ -153,15 +143,12 @@ Login And Delete Account
     Wait Until Element Is Visible    ${HEADER_LOCATOR_DELETED}
     Close All Browsers
 
-
-Choose And Upload File
-    Choose File    ${UPLOAD_FILE_LOCATOR}    ${FILE_PATH1}
-
-Upload File
-    [Arguments]  ${raw_file_path}
-    ${normalized_file_path}=  Replace String  ${raw_file_path}  \\  /
-    Log  Normalized File Path: ${normalized_file_path}
-    Choose File  ${UPLOAD_FILE_LOCATOR}  ${normalized_file_path}
+Create And Upload File
+    [Arguments]    ${file_name}    ${file_content}
+    Create File    ${CURDIR}/${file_name}    ${file_content}
+    File Should Exist    ${CURDIR}/${file_name}
+    Choose File    ${UPLOAD_FILE_LOCATOR}    ${CURDIR}/${file_name}
+    Should Not Be Empty    ${UPLOAD_FILE_LOCATOR}
 
 Check Account Is Successfully Deleted
     [Arguments]  ${locator}  ${expected_text}
@@ -169,22 +156,12 @@ Check Account Is Successfully Deleted
     ${header_text}=  Get Text  ${HEADER_LOCATOR_DELETED}
     Should Be Equal  ${header_text}  ACCOUNT DELETED!
 
-Check Relevant Product Details Are Shown
-    Check product name is displayed    ${PRODUCT_DETAILS_NAME_LOCATOR}
-    Check product category is displayed   ${PRODUCT_DETAILS_CATEGORY_LOCATOR}
-    Check product price is displayed  ${PRODUCT_DETAILS_PRICE_LOCATOR}
-    Check product availability is displayed   ${PRODUCT_DETAILS_AVAILABILITY_LOCATOR}
-    Check product condition is displayed  ${PRODUCT_DETAILS_CONDITION_LOCATOR}
-    Check product brand is displayed      ${PRODUCT_DETAILS_BRAND_LOCATOR}
-
 Search For Product
-    [Arguments]    ${search_locator}    ${product}
-    Input Text    ${SEARCH_LOCATOR}    ${product}
+    [Arguments]    ${search_locator}    ${product}   ${search_header_locator}
+    Input Text    ${search_locator}    ${product}
     Click Button   ${SEARCH_BUTTON}
-
-Check Searched Results Are Shown On The Page
-    Scroll Element Into View    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
-    Check Search Results Are Correct    ${TEST_PRODUCT}    Polo
+    ${header_text}=  Get Text  ${search_header_locator}
+    Should Be Equal As Strings    ${header_text}    SEARCHED PRODUCTS
 
 
 

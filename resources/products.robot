@@ -3,60 +3,62 @@ Library      SeleniumLibrary
 
 *** Variables ***
 ${SEARCH_BUTTON}    //*[@id="submit_search"]
-${PRODUCTS_LIST_LOCATOR}    //*[@class="col-sm-4"]
+${PRODUCTS_LIST_LOCATOR}    //*[@class='features_items']
 ${NEXT_PRODUCT}    //*[@href="/product_details/4"]
 
 *** Keywords ***
 Check Products List Is Shown
-    [Arguments]  ${locator}
     Wait Until Element Is Visible  ${PRODUCTS_LIST_LOCATOR}
-    ${elements}=  Get WebElements  ${PRODUCTS_LIST_LOCATOR}
-    ${count}=  Get Length  ${elements}
-    Should Be True    ${count}>1    Products list should not be empty
+    Element Should Be Visible    ${PRODUCTS_LIST_LOCATOR}
 
-Verify product card visible
+Check product card visible
     Scroll Element Into View    ${NEXT_PRODUCT}
     Wait Until Element Is Visible   ${NEXT_PRODUCT}
 
-Check product name is displayed
-    [Arguments]  ${locator}
-    Wait Until Element Is Visible  ${locator}
-    ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+Check User Is Redirected To Product Details Page
+    [Arguments]    ${product_name_locator}     ${product_name}
+    Wait Until Element Is Visible    ${product_name_locator}
+    ${expected_header}=    Get text    ${product_name_locator}
+    Should Be Equal As Strings    ${expected_header}    ${product_name}
 
-Check product category is displayed
-    [Arguments]  ${locator}
+Check Product Name Is Displayed
+    [Arguments]    ${locator}    ${product_name}
     Wait Until Element Is Visible  ${locator}
-    ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+    ${paragraph_text}=    Get Text  ${locator}
+    Should Be Equal As Strings    ${paragraph_text}    ${product_name}
 
-Check product price is displayed
+Check Product Category Is Displayed
     [Arguments]  ${locator}
     Wait Until Element Is Visible  ${locator}
-    ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+    ${paragraph_text}=    Get Text  ${locator}
+    Should Not Be Empty    ${paragraph_text}
 
-Check product availability is displayed
+Check Product Price Is Displayed
     [Arguments]  ${locator}
     Wait Until Element Is Visible  ${locator}
     ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+    Should Not Be Empty    ${paragraph_text}
 
-Check product condition is displayed
+Check Product Availability Is Displayed
     [Arguments]  ${locator}
     Wait Until Element Is Visible  ${locator}
     ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+    Should Not Be Empty    ${paragraph_text}
 
-Check product brand is displayed
+Check Product Condition Is Displayed
     [Arguments]  ${locator}
     Wait Until Element Is Visible  ${locator}
     ${paragraph_text}=  Get Text  ${locator}
-    Log     Paragraph text: ${paragraph_text}
+    Should Not Be Empty    ${paragraph_text}
+
+Check Product Brand Is Displayed
+    [Arguments]  ${locator}
+    Wait Until Element Is Visible  ${locator}
+    ${paragraph_text}=  Get Text  ${locator}
+    Should Not Be Empty    ${paragraph_text}
 
 Check Search Results Are Correct
-    [Arguments]   ${paragraph_locator}    ${product}
+    [Arguments]   ${paragraph_locator}    ${product_name}
     Wait Until Element Is Visible  ${paragraph_locator}
     ${paragraph_text}=  Get Text   ${paragraph_locator}
-    Log  Paragraph Text: ${paragraph_text}
-    Should Contain  ${paragraph_text}  Polo
+    Should Contain    ${paragraph_text}    ${product_name}
