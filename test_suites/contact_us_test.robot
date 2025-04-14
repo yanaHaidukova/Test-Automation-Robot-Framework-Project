@@ -1,10 +1,11 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
 Library    OperatingSystem
-Test Teardown   Close All Browsers
+Test Setup    Go To Automation Exercise Home Page
+Suite Teardown    Close All Browsers
 
-#robot -d results test_suites/contact_us_test.robot
 *** Variables ***
+${CONTACT_US_LINK}    //*[@href="/contact_us"]
 ${HEADER_LOCATOR_CONTACT_US}    //*[@class="contact-form"]//h2
 ${NAME_FIELD_ID}    //input[@name="name"]
 ${EMAIL_CONTACT_ID}    //input[@name="email"]
@@ -14,19 +15,19 @@ ${VALID_EMAIL}    evatestemail@gmail.com
 ${FILE_NAME}    test_upload_file.txt
 ${FILE_CONTENT}    This is a test file for upload.
 ${FOOTER}    //*[@class="footer-bottom"]
+${SUCCESS_SUBMITION}    Success! Your details have been submitted successfully.
+${SUCCESS_SNACKBAR}    //*[@class="status alert alert-success"]
+${SUBMIT_FORM}    //input[@name="submit"]
 
 *** Test Cases ***
 Verify Use Can Fill In Contact Us Form
     [Tags]  UI_tests_Part1
-    [Setup]  Go To Automation Exercise Home Page
     [Teardown]  Remove File From Resources    ${FILE_NAME}
-    Check User Can Navigate To Contact Us Page
-    Input Text    ${NAME_FIELD_ID}    Eva
-    Textfield Should Contain    ${NAME_FIELD_ID}    Eva
-    Input Text    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}
-    Textfield Should Contain    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}
-    Input Text    ${SUBJECT_FILED_ID}    Test subject
-    Textfield Should Contain    ${SUBJECT_FILED_ID}    Test subject
+    Click Link    ${CONTACT_US_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_CONTACT_US}    GET IN TOUCH
+    Input And Verify Text Field    ${NAME_FIELD_ID}    Eva
+    Input And Verify Text Field    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}
+    Input And Verify Text Field    ${SUBJECT_FILED_ID}    Test subject
     Scroll Element Into View    ${MESSAGE_FIELD_ID}
     Input Text    ${MESSAGE_FIELD_ID}    Message to contact us
     Should Not Be Empty    ${MESSAGE_FIELD_ID}
@@ -34,7 +35,10 @@ Verify Use Can Fill In Contact Us Form
     Scroll Element Into View    ${FOOTER}
     Element Should Be Visible    ${SUBMIT_FORM}
     Click Button      ${SUBMIT_FORM}
-    Check Form Is Successfully Submited
+    Handle Alert
+    Check Expected Notifications    ${SUCCESS_SNACKBAR}    ${SUCCESS_SUBMITION}
+
+
 
 
     

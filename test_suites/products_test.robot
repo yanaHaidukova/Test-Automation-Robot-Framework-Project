@@ -1,11 +1,11 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
+Library     BuiltIn
 Test Setup    Go To Automation Exercise Home Page
 Test Teardown   Close All Browsers
 
-#robot -d results test_suites/products_test.robot
-
 *** Variables ***
+${PRODUCTS_LINK}    //*[@id="header"]//a[@href="/products"]
 ${PRODUCT_LINK_LOCATOR}    //a[@href="/product_details/1"]
 ${AD_CLOSE_BUTTON}    /html/body/ins[2]/*[1]//ins/span/svg/path
 ${SEARCH_LOCATOR}    //*[@id="search_product"]
@@ -16,25 +16,32 @@ ${AVAILABILITY_LOCATOR}    //*[@class="product-information"]//p[2]
 ${CONDITION_LOCATOR}    //*[@class="product-information"]//p[3]
 ${BRAND_LOCATOR}    //*[@class="product-information"]//p[4]
 ${HEADER_SEARCHED_PRODUCTS_LOCATOR}    //*[@class="features_items"]/h2
-${SEARCH_PRODUCT}     //*[contains (text(), 'Polo')]
+${HEADER_LOCATOR_PRODUCTS}    //h2[@class="title text-center"]
+${NEXT_PRODUCT}    //*[@href="/product_details/4"]
+${PRODUCT_NAME}     Dress
+${PRODUCT_FROM_LIST}    //*[@class="single-products"]
 
 *** Test Cases ***
-Verify All Products and product detail page
+Verify All Products And Product Details Page
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To Products Page
-    Check Product Card Visible
+    Click Link    ${PRODUCTS_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
+    Scroll Element Into View    ${NEXT_PRODUCT}
+    Wait Until Element Is Visible   ${NEXT_PRODUCT}
     Click Link    ${PRODUCT_LINK_LOCATOR}
-    Check User Is Redirected To Product Details Page    ${PRODUCT_NAME_LOCATOR}    Blue Top
-    Check Product Name Is Displayed    ${PRODUCT_NAME_LOCATOR}    Blue Top
-    Check Product Category Is Displayed    ${CATEGORY_LOCATOR}
-    Check Product Price Is Displayed    ${PRICE_LOCATOR}
-    Check Product Availability Is Displayed    ${AVAILABILITY_LOCATOR}
-    Check Product Condition Is Displayed    ${CONDITION_LOCATOR}
-    Check Product Brand Is Displayed      ${BRAND_LOCATOR}
+    Check User Is Redirected To The Selected Page    ${PRODUCT_NAME_LOCATOR}    Blue top
+    Check Product Details    ${PRODUCT_NAME_LOCATOR}
+    Check Product Details    ${CATEGORY_LOCATOR}
+    Check Product Details    ${PRICE_LOCATOR}
+    Check Product Details    ${AVAILABILITY_LOCATOR}
+    Check Product Details    ${CONDITION_LOCATOR}
+    Check Product Details    ${BRAND_LOCATOR}
 
-Search Product
+Verify User Can Search For Product
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To Products Page
-    Search For Product    ${SEARCH_LOCATOR}    Polo    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
-    Scroll Element Into View    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
-    Check Search Results Are Correct    ${SEARCH_PRODUCT}    Polo
+    Click Link    ${PRODUCTS_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
+    Search For Product    ${SEARCH_LOCATOR}    ${PRODUCT_NAME}    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
+    Scroll Element Into View    ${SEARCH_LOCATOR}
+    Check Search Results   ${PRODUCT_FROM_LIST}    ${PRODUCT_NAME}
+

@@ -3,8 +3,6 @@ Resource    ../resources/common_resources.robot
 Test Setup    Go To Automation Exercise Home Page
 Suite Teardown    Login And Delete Account    ${VALID_NAME}
 
-#robot -d results test_suites/login_test.robot
-
 *** Variables ***
 ${NAME_FIELD_ID}    //input[@name="name"]
 ${VALID_NAME}    Elen
@@ -21,14 +19,16 @@ ${ERROR_EXISTING_USER_ID}    //*[@id="form"]//p
 ${ACCOUNT_CREATED_ID}    //*[@id="form"]//h2[@data-qa="account-created"]
 ${HEADER_LOCATOR_NEW_SIGNIN}    //*[@class="signup-form"]//h2
 ${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
+${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 
 *** Test Cases ***
 Register user
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To SignIn Page
+    Click Link    ${SIGNUP_LOGIN_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Check User Can Input User Name And Email    ${NAME_FIELD_ID}    ${VALID_NAME}    ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
     Click Button    ${SIGNUP_BUTTON}
-    Check User Is Successfully Redirected To Enter Account Information Page    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
+    Check User Is Redirected To The Selected Page    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
     Check User Can Enter Account Information
     Check User Can Sing Up for Newsletter
     Check User Can Enter Address Information
@@ -39,12 +39,14 @@ Register user
 
 Login User with correct email and password
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To Login Page
+    Click Link    ${SIGNUP_LOGIN_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}
 
 Login User with incorrect email and password
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To Login Page
+    Click Link    ${SIGNUP_LOGIN_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Input Text    ${EMAIL_FIELD_LOGIN_ID}    ${INVALID_USER_EMAIL}
     Input Text    ${INPUT_PASSWORD}    ${INVALID_PASSWORD}
     Click Button  ${LOGIN_BUTTON_ID}
@@ -52,13 +54,15 @@ Login User with incorrect email and password
 
 Logout User
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To Login Page
+    Click Link    ${SIGNUP_LOGIN_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}    ${VALID_NAME}
     Check User Is Logged Out From Account
 
 Register User with existing email
     [Tags]  UI_tests_Part1
-    Check User Can Navigate To SignIn Page
+    Click Link    ${SIGNUP_LOGIN_LINK}
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Check User Can Input User Name And Email    ${NAME_FIELD_ID}    ${VALID_NAME}    ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
     Click Button    ${SIGNUP_BUTTON}
     Check Account Already Exists    ${ERROR_EXISTING_USER_ID}    Email Address already exist!

@@ -1,7 +1,6 @@
 *** Settings ***
 Library      SeleniumLibrary
 Resource    ../resources/login.robot
-Resource    ../resources/top_nav.robot
 Resource    ../resources/contact_us.robot
 Resource    ../resources/products.robot
 Resource    ../resources/test_cases.robot
@@ -17,15 +16,9 @@ ${INPUT_PASSWORD}    //input[@type="password"]
 ${INVALID_PASSWORD}    invalidpass1
 ${LOGGOUT_BUTTON_ID}    //a[contains(text(),' Logout')]
 ${CONFIRM_COOKIES}    //*[@role="button"][@aria-label="Consent"]
-${HEADER_LOCATOR_CONTACT_US}    //*[@class="contact-form"]//h2
 ${HEADER_LOCATOR_DELETED}    //*[text()= 'Account Deleted!']
-${HEADER_LOCATOR_PRODUCTS}    //h2[@class="title text-center"]
-${EMAIL_CONTACT_ID}    //input[@name="email"]
-${FILE_PATH1}    ${CURDIR}\\files\\understanding-abstract-art.jpg
 ${UPLOAD_FILE_LOCATOR}    //input[@name="upload_file"]
 ${ERROR_INVALID_CREDENTIALS_ID}    //*[@id="form"]//p
-${ERROR_INVALID_CREDENTIALS_TEXT}    Your email or password is incorrect!
-${HEADER_SEARCHED_PRODUCTS_LOCATOR}    //*[@class="features_items"]/h2
 ${PASSWORD_FIELD_ID}    //*[@id="password"]
 ${PASSWORD_VALUE}    PASSWORD123
 ${DAY_DROPDOWN}    //*[@id="days"]
@@ -44,11 +37,9 @@ ${MOBILE_NUMBER_ID}    //*[@id="mobile_number"]
 ${EMAIL_FIELD_LOGIN_ID}    //input[@name="email"][@data-qa="login-email"]
 ${INPUT_PASSWORD}    //input[@type="password"]
 ${CONFIRM_COOKIES}    //*[@role="button"][@aria-label="Consent"]
-${TEST_PRODUCT}    //*[@class="productinfo text-center"]//p
 ${HOME_PAGE_LINK}    https://automationexercise.com
 ${BROWSER}    headlesschrome
 ${HOME_CAROUSEL}    //*[@id="slider-carousel"]
-${NEW_SIGNUP_HEADER}    //*[@id="form"]//div[2]/h2
 ${HEADER_LOCATOR_NEW_SIGNIN}    //*[@class="signup-form"]//h2
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
@@ -64,17 +55,11 @@ Go To Automation Exercise Home Page
     Run Keyword If    '${status}' == 'PASS'    Click Element    ${CONFIRM_COOKIES}
     Wait Until Page Contains Element    ${HOME_CAROUSEL}
 
-Check User Can Navigate To Login Page
-    Click Link    ${SIGNUP_LOGIN_LINK}
-    Wait Until Element Is Visible    ${HEADER_LOCATOR_LOGIN}
-    ${header_text}=  Get Text    ${HEADER_LOCATOR_LOGIN}
-    Should Be Equal As Strings    ${header_text}    Login to your account
-
-Check User Can Navigate To SignIn Page
-    Click Link    ${SIGNUP_LOGIN_LINK}
-    Wait Until Element Is Visible    ${HEADER_LOCATOR_NEW_SIGNIN}
-    ${header_text}=  Get Text    ${HEADER_LOCATOR_NEW_SIGNIN}
-    Should Be Equal As Strings    ${header_text}    New User Signup!
+Check User Is Redirected To The Selected Page
+    [Arguments]   ${header_locator}   ${expected_header}
+    Wait Until Element Is Visible    ${header_locator}
+    ${header_text}=  Get Text    ${header_locator}
+    Should Be Equal As Strings    ${header_text}   ${expected_header}
 
 Check User Can Enter Account Information
     Check User Can Select A Title    ${TITLE_RADIO_BUTTON}    Mr
@@ -118,12 +103,11 @@ Check User Is Logged Out From Account
     ${header_text}=  Get Text    ${HEADER_LOCATOR_LOGIN}
     Should Be Equal As Strings    ${header_text}    Login to your account
 
-Check that user is successfully subscribed
-    [Arguments]  ${locator}  ${expected_text}
-    Wait Until Element Is Visible  ${locator}
-    ${snackbar_text}=  Get Text  ${locator}
-    Log  Snackbar Text: ${snackbar_text}
-    Should Contain  ${snackbar_text}  ${expected_text}
+Check Expected Notifications
+    [Arguments]  ${header_locator}  ${expected_text}
+    Wait Until Element Is Visible  ${header_locator}
+    ${header_text}=  Get Text  ${header_locator}
+    Should Be Equal  ${header_text}  ${expected_text}
 
 Login And Delete Account
     [Arguments]  ${username}

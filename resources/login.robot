@@ -28,13 +28,6 @@ ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${LOGGEDIN_SUCCESS}    //*[@id="header"]//li[10]/a
 
 *** Keywords ***
-Check User Is Successfully Redirected To Enter Account Information Page
-    [Arguments]  ${locator}  ${expected_text}
-    Wait Until Element Is Visible  ${locator}
-    ${header_text}=  Get Text  ${locator}
-    Log    ${header_text}
-    Should Be Equal  ${header_text}  ${expected_text}
-
 Check User Can Select A Title
     [Arguments]  ${name}  ${value}
     ${xpath}=  Replace String  ${TITLE_RADIO_BUTTON}  {name}  ${name}
