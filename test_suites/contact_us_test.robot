@@ -20,7 +20,7 @@ ${SUCCESS_SNACKBAR}    //*[@class="status alert alert-success"]
 ${SUBMIT_FORM}    //input[@name="submit"]
 
 *** Test Cases ***
-Verify Use Can Fill In Contact Us Form
+Verify User Can Submit Contact Us Form
     [Tags]  UI_tests_Part1
     [Teardown]  Remove File From Resources    ${FILE_NAME}
     Click Link    ${CONTACT_US_LINK}

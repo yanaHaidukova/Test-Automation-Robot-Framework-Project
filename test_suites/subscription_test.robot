@@ -11,10 +11,10 @@ ${SUBSCRIBE_BUTTON}    //*[@id="subscribe"]
 ${SNACKBAR_LOCATOR}    //*[@id="success-subscribe"]
 
 *** Test Cases ***
-Verify Subscription in home page
+Verify User Can Subsribe To Receive Notifications
     [Tags]  UI_tests_Part1
     Scroll Element Into View    ${FOOTER_LOCATOR}
-    Input Text    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
+    Input And Verify Text Field    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
     Click Button    ${SUBSCRIBE_BUTTON}
     Check Expected Notifications    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
 

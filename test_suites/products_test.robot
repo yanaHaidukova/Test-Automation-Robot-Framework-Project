@@ -29,7 +29,7 @@ Verify All Products And Product Details Page
     Scroll Element Into View    ${NEXT_PRODUCT}
     Wait Until Element Is Visible   ${NEXT_PRODUCT}
     Click Link    ${PRODUCT_LINK_LOCATOR}
-    Check User Is Redirected To The Selected Page    ${PRODUCT_NAME_LOCATOR}    Blue top
+    Check User Is Redirected To The Selected Page    ${PRODUCT_NAME_LOCATOR}    Blue Top
     Check Product Details    ${PRODUCT_NAME_LOCATOR}
     Check Product Details    ${CATEGORY_LOCATOR}
     Check Product Details    ${PRICE_LOCATOR}
