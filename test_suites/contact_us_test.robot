@@ -1,7 +1,7 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
 Library    OperatingSystem
-Test Setup    Go To Automation Exercise Home Page
+Test Setup    Go To Required Link    ${CONTACT_US_LINK}
 Suite Teardown    Close All Browsers
 
 *** Variables ***
@@ -23,7 +23,6 @@ ${SUBMIT_FORM}    //input[@name="submit"]
 Verify User Can Submit Contact Us Form
     [Tags]  UI_tests_Part1
     [Teardown]  Remove File From Resources    ${FILE_NAME}
-    Click Link    ${CONTACT_US_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_CONTACT_US}    GET IN TOUCH
     Input And Verify Text Field    ${NAME_FIELD_ID}    Eva
     Input And Verify Text Field    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}

@@ -1,7 +1,7 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
 Resource    ../resources/login.robot
-Test Setup    Go To Automation Exercise Home Page
+Test Setup    Go To Required Link    ${SIGNUP_LOGIN_LINK}
 Suite Teardown    Login And Delete Account
 
 *** Variables ***
@@ -15,16 +15,15 @@ ${INVALID_USER_EMAIL}    hola@gmail.com
 ${INVALID_PASSWORD}    invalidpass1
 ${CREATE_ACCOUNT_BUTTON}    //button[@type="submit"][@data-qa="create-account"]
 ${CONTINUE_BUTTON_ID}    //*[@class="btn btn-primary"]
-${ERROR_EXISTING_USER_ID}    //*[@id="form"]//p
+${VALIDATION_EXISTING_USER}    //*[@id="form"]//p
 ${ACCOUNT_CREATED_ID}    //*[@id="form"]//h2[@data-qa="account-created"]
 ${HEADER_LOCATOR_NEW_SIGNIN}    //*[@class="signup-form"]//h2
 ${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 
 *** Test Cases ***
-Register user
+Verify New User Registration
     [Tags]  UI_tests_Part1
-    Click Link    ${SIGNUP_LOGIN_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Input And Verify Text Field    ${NAME_FIELD_ID}    ${VALID_NAME}
     Input And Verify Text Field     ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
@@ -38,38 +37,34 @@ Register user
     Click Button    ${CREATE_ACCOUNT_BUTTON}
     Wait Until Element Is Visible      ${ACCOUNT_CREATED_ID}
     Click Link    ${CONTINUE_BUTTON_ID}
-    Check Logged In As Username Link Is Visible    ${VALID_NAME}
+    Element Should Contain    ${LOGGEDIN_SUCCESS}    ${VALID_NAME}
 
-Login User with correct email and password
+Verify User With Correct Email And Password
     [Tags]  UI_tests_Part1
-    Click Link    ${SIGNUP_LOGIN_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
-    Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
+    Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}    ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
 
-Login User with incorrect email and password
+Verify User With Incorrect Email And Password
     [Tags]  UI_tests_Part1
-    Click Link    ${SIGNUP_LOGIN_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Input And Verify Text Field    ${EMAIL_FIELD_LOGIN_ID}    ${INVALID_USER_EMAIL}
     Input And Verify Text Field    ${INPUT_PASSWORD}    ${INVALID_PASSWORD}
     Click Button  ${LOGIN_BUTTON_ID}
-    Check Relevant Validation Message Is Shown    ${ERROR_INVALID_CREDENTIALS_ID}    Your email or password is incorrect!
+    Check Expected Notifications    ${VALIDATION_INVALID_CRED}    Your email or password is incorrect!
 
-Logout User
+Verify User Log Out Flow
     [Tags]  UI_tests_Part1
-    Click Link    ${SIGNUP_LOGIN_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
     Click Link  ${LOGGOUT_BUTTON_ID}
-    Check User Is Logged Out From Account
+    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
 
-Register User with existing email
+Verify User Registration With Existing Email
     [Tags]  UI_tests_Part1
-    Click Link    ${SIGNUP_LOGIN_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Input And Verify Text Field    ${NAME_FIELD_ID}    ${VALID_NAME}
     Input And Verify Text Field   ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
     Click Button    ${SIGNUP_BUTTON}
-    Check Relevant Validation Message Is Shown    ${ERROR_EXISTING_USER_ID}    Email Address already exist!
+    Check Expected Notifications    ${VALIDATION_EXISTING_USER}    Email Address already exist!
 
 

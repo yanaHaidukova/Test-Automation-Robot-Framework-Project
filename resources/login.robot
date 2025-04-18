@@ -6,16 +6,15 @@ Resource     ../resources/common_resources.robot
 
 *** Variables ***
 ${NAME_FIELD_ID}    //input[@name="name"]
-${VALID_NAME}    Eva
+${VALID_NAME}    Lora
 ${EMAIL_FIELD_ID}    //input[@name="email"][@data-qa="signup-email"]
-${VALID_EMAIL}    evatestemail@gmail.com
+${VALID_EMAIL}    loratestemail@gmail.com
 ${DAY_DROPDOWN}    //*[@id="days"]
 ${MONTH_DROPDOWN}    //*[@id="months"]
 ${YEAR_DROPDOWN}    //*[@id="years"]
 ${SIGNUP_CHECKBOX}    //*[@id="newsletter"]
 ${CONTINUE_BUTTON_ID}    //*[@class="btn btn-primary"]
 ${HEADER_LOCATOR_ACCOUNT_INFO}    //*[@class="login-form"]/h2
-${TITLE_RADIO_BUTTON}    //*[@name="title"]
 ${NAME_FIELD_POPULATED}    //input[@id="name"]
 ${EMAIL_FIELD_POPULATED}    //input[@id="email"]
 ${LOGIN_BUTTON_ID}    //button[@type="submit"][@data-qa="login-button"]
@@ -23,8 +22,7 @@ ${COMPANY_NAME_ID}    //*[@id="company"]
 ${STATE_ID}    //*[@id="state"]
 ${EMAIL_FIELD_LOGIN_ID}    //input[@name="email"][@data-qa="login-email"]
 ${INPUT_PASSWORD}    //input[@type="password"]
-${ERROR_INVALID_CREDENTIALS_ID}    //p[contains(text(), 'Your email or password is incorrect!')]
-${ERROR_EXISTING_USER_ID}    //*[@id="form"]//p
+${VALIDATION_EXISTING_USER}    //*[@id="form"]//p
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${LOGGEDIN_SUCCESS}    //*[@id="header"]//li[10]/a
 ${PASSWORD_FIELD_ID}    //*[@id="password"]
@@ -50,20 +48,19 @@ Check Usen Can Log In With Valid Credentials
     ${header_text}=  Get Text    ${success_notification}
     Should Contain  ${header_text}  ${username}
 
+Check User Can Create A Password
+    Input Password    ${PASSWORD_FIELD_ID}     ${PASSWORD_VALUE}
+    ${pass_created}=    Get Value    ${PASSWORD_FIELD_ID}
+    Should Not Be Empty    ${pass_created}
+
 Check User Can Enter Account Information
-    Validate Radio Button Is Selected    ${TITLE_RADIO_BUTTON}    title    Mr    checked    true
-    Check Text Field Pre-Populated   ${NAME_FIELD_POPULATED}    ${VALID_NAME}
-    Check Text Field Pre-Populated     ${EMAIL_FIELD_POPULATED}    ${VALID_EMAIL}
-    Check User Can Create A Password    ${PASSWORD_FIELD_ID}    ${PASSWORD_VALUE}
+    Select And Validate Radio Button    title    Mr
+    Textfield Should Contain   ${NAME_FIELD_POPULATED}    ${VALID_NAME}
+    Textfield Should Contain     ${EMAIL_FIELD_POPULATED}    ${VALID_EMAIL}
+    Check User Can Create A Password
     Select Option From Drop Down    ${DAY_DROPDOWN}    1
     Select Option From Drop Down    ${MONTH_DROPDOWN}    4
     Select Option From Drop Down    ${YEAR_DROPDOWN}     1999
-
-Check User Can Create A Password
-    [Arguments]     ${passcreate_locator}    ${pass_value}
-    Input Password    ${passcreate_locator}    ${pass_value}
-    ${pass_created}=    Get Value    ${passcreate_locator}
-    Should Not Be Empty    ${pass_created}
 
 Check User Can Enter Address Information
     Input And Verify Text Field    ${FIRST_NAME_ID}    ${VALID_NAME}

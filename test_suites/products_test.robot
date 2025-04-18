@@ -1,7 +1,7 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
 Library     BuiltIn
-Test Setup    Go To Automation Exercise Home Page
+Test Setup    Go To Required Link    ${PRODUCTS_LINK}
 Test Teardown   Close All Browsers
 
 *** Variables ***
@@ -24,22 +24,20 @@ ${PRODUCT_FROM_LIST}    //*[@class="single-products"]
 *** Test Cases ***
 Verify All Products And Product Details Page
     [Tags]  UI_tests_Part1
-    Click Link    ${PRODUCTS_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
     Scroll Element Into View    ${NEXT_PRODUCT}
     Wait Until Element Is Visible   ${NEXT_PRODUCT}
     Click Link    ${PRODUCT_LINK_LOCATOR}
     Check User Is Redirected To The Selected Page    ${PRODUCT_NAME_LOCATOR}    Blue Top
-    Check Product Details    ${PRODUCT_NAME_LOCATOR}
-    Check Product Details    ${CATEGORY_LOCATOR}
-    Check Product Details    ${PRICE_LOCATOR}
-    Check Product Details    ${AVAILABILITY_LOCATOR}
-    Check Product Details    ${CONDITION_LOCATOR}
-    Check Product Details    ${BRAND_LOCATOR}
+    Check Product Details Are Displayed    ${PRODUCT_NAME_LOCATOR}
+    Check Product Details Are Displayed    ${CATEGORY_LOCATOR}
+    Check Product Details Are Displayed    ${PRICE_LOCATOR}
+    Check Product Details Are Displayed    ${AVAILABILITY_LOCATOR}
+    Check Product Details Are Displayed    ${CONDITION_LOCATOR}
+    Check Product Details Are Displayed    ${BRAND_LOCATOR}
 
 Verify User Can Search For Product
     [Tags]  UI_tests_Part1
-    Click Link    ${PRODUCTS_LINK}
     Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
     Search For Product    ${SEARCH_LOCATOR}    ${PRODUCT_NAME}    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
     Scroll Element Into View    ${SEARCH_LOCATOR}
