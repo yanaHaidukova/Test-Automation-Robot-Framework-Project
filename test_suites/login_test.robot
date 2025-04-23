@@ -24,11 +24,11 @@ ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 *** Test Cases ***
 Verify New User Registration
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Input And Verify Text Field    ${NAME_FIELD_ID}    ${VALID_NAME}
     Input And Verify Text Field     ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
     Click Button    ${SIGNUP_BUTTON}
-    Check User Is Redirected To The Selected Page    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
+    Check Relevant Text Is Displayed    ${HEADER_ACCOUNT_INFO}    ENTER ACCOUNT INFORMATION
     Check User Can Enter Account Information
     Scroll Element Into View    ${COMPANY_NAME_ID}
     Wait Until Element Is Visible    ${SIGNUP_CHECKBOX}
@@ -39,32 +39,32 @@ Verify New User Registration
     Click Link    ${CONTINUE_BUTTON_ID}
     Element Should Contain    ${LOGGEDIN_SUCCESS}    ${VALID_NAME}
 
-Verify User With Correct Email And Password
+Verify User Can Login With Correct Email And Password
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}    ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
 
-Verify User With Incorrect Email And Password
+Verify User Cannot Login With Incorrect Email And Password
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Input And Verify Text Field    ${EMAIL_FIELD_LOGIN_ID}    ${INVALID_USER_EMAIL}
     Input And Verify Text Field    ${INPUT_PASSWORD}    ${INVALID_PASSWORD}
     Click Button  ${LOGIN_BUTTON_ID}
-    Check Expected Notifications    ${VALIDATION_INVALID_CRED}    Your email or password is incorrect!
+    Check Relevant Text Is Displayed    ${VALIDATION_INVALID_CRED}    Your email or password is incorrect!
 
 Verify User Log Out Flow
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_LOGIN}    Login to your account
     Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
     Click Link  ${LOGGOUT_BUTTON_ID}
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_LOGIN}    Login to your account
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_LOGIN}    Login to your account
 
 Verify User Registration With Existing Email
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_NEW_SIGNIN}    New User Signup!
     Input And Verify Text Field    ${NAME_FIELD_ID}    ${VALID_NAME}
     Input And Verify Text Field   ${EMAIL_FIELD_ID}    ${VALID_EMAIL}
     Click Button    ${SIGNUP_BUTTON}
-    Check Expected Notifications    ${VALIDATION_EXISTING_USER}    Email Address already exist!
+    Check Relevant Text Is Displayed    ${VALIDATION_EXISTING_USER}    Email Address already exist!
 
 

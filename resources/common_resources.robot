@@ -39,23 +39,17 @@ Go To Required Link
     Go To Automation Exercise Home Page
     Click Link    ${required_link}
 
-Check User Is Redirected To The Selected Page
-    [Arguments]   ${header_locator}   ${expected_header}
-    Wait Until Element Is Visible    ${header_locator}
-    ${header_text}=  Get Text    ${header_locator}
-    Should Be Equal As Strings    ${header_text}   ${expected_header}
+Check Relevant Text Is Displayed
+    [Arguments]   ${text_locator}   ${expected_text}
+    Wait Until Element Is Visible    ${text_locator}
+    ${actual_text}=  Get Text    ${text_locator}
+    Should Be Equal As Strings    ${actual_text}   ${expected_text}
 
 Check User Can Select A Checkbox
     [Arguments]   ${checkbox_locator}
     Select Checkbox    ${checkbox_locator}
     ${is_selected}=  Get Element Attribute  ${checkbox_locator}  checked
     Should Be Equal  ${is_selected}  true
-
-Check Expected Notifications
-    [Arguments]    ${notification_locator}    ${expected_text}
-    Wait Until Element Is Visible    ${notification_locator}
-    ${notification_text}=  Get Text    ${notification_locator}
-    Should Be Equal As Strings    ${notification_text}    ${expected_text}
 
 Select Option From Drop Down
     [Arguments]    ${drop_down_locator}    ${drop_down_value}
@@ -99,9 +93,7 @@ Select And Validate Radio Button
     ${radio_button_locator}=  Replace String    ${RADIO_BUTTON_XPATH_TEMPLATE}    {name}    ${name}
     ${radio_button_locator}=  Replace String    ${radio_button_locator}    {value}    ${value}
     Click Element    ${radio_button_locator}
-    ${is_selected}=  Get Element Attribute    ${radio_button_locator}  checked
-    Should Be Equal As Strings    ${is_selected}    true
-
+    Element Attribute Value Should Be    ${radio_button_locator}    checked    true
 
 
 

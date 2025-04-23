@@ -10,4 +10,4 @@ ${TEST_CASES_LINK}    //*[@id="header"]//a[@href="/test_cases"]
 *** Test Cases ***
 Verify Test Cases Page
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_TEST_CASES_LOCATOR}    TEST CASES
+    Check Relevant Text Is Displayed    ${HEADER_TEST_CASES_LOCATOR}    TEST CASES

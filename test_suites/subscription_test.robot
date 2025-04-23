@@ -16,6 +16,6 @@ Verify User Can Subsribe To Receive Notifications
     Scroll Element Into View    ${FOOTER_LOCATOR}
     Input And Verify Text Field    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
     Click Button    ${SUBSCRIBE_BUTTON}
-    Check Expected Notifications    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
+    Check Relevant Text Is Displayed    ${SNACKBAR_LOCATOR}    You have been successfully subscribed!
 
 

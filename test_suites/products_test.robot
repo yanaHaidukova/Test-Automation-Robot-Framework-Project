@@ -24,21 +24,21 @@ ${PRODUCT_FROM_LIST}    //*[@class="single-products"]
 *** Test Cases ***
 Verify All Products And Product Details Page
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
     Scroll Element Into View    ${NEXT_PRODUCT}
     Wait Until Element Is Visible   ${NEXT_PRODUCT}
     Click Link    ${PRODUCT_LINK_LOCATOR}
-    Check User Is Redirected To The Selected Page    ${PRODUCT_NAME_LOCATOR}    Blue Top
-    Check Product Details Are Displayed    ${PRODUCT_NAME_LOCATOR}
-    Check Product Details Are Displayed    ${CATEGORY_LOCATOR}
-    Check Product Details Are Displayed    ${PRICE_LOCATOR}
-    Check Product Details Are Displayed    ${AVAILABILITY_LOCATOR}
-    Check Product Details Are Displayed    ${CONDITION_LOCATOR}
-    Check Product Details Are Displayed    ${BRAND_LOCATOR}
+    Check Relevant Text Is Displayed    ${PRODUCT_NAME_LOCATOR}    Blue Top
+    Wait Until Page Contains Element   ${PRODUCT_NAME_LOCATOR}
+    Wait Until Page Contains Element    ${CATEGORY_LOCATOR}
+    Wait Until Page Contains Element    ${PRICE_LOCATOR}
+    Wait Until Page Contains Element    ${AVAILABILITY_LOCATOR}
+    Wait Until Page Contains Element    ${CONDITION_LOCATOR}
+    Wait Until Page Contains Element    ${BRAND_LOCATOR}
 
 Verify User Can Search For Product
     [Tags]  UI_tests_Part1
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_PRODUCTS}    ALL PRODUCTS
     Search For Product    ${SEARCH_LOCATOR}    ${PRODUCT_NAME}    ${HEADER_SEARCHED_PRODUCTS_LOCATOR}
     Scroll Element Into View    ${SEARCH_LOCATOR}
     Check Search Results   ${PRODUCT_FROM_LIST}    ${PRODUCT_NAME}

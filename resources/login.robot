@@ -44,9 +44,7 @@ Check Usen Can Log In With Valid Credentials
     Input Text    ${EMAIL_FIELD_LOGIN_ID}   ${email}
     Input Text    ${INPUT_PASSWORD}    ${password}
     Click Button  ${LOGIN_BUTTON_ID}
-    Wait Until Element Is Visible    ${LOGGEDIN_SUCCESS}
-    ${header_text}=  Get Text    ${success_notification}
-    Should Contain  ${header_text}  ${username}
+    Check Relevant Text Is Displayed    ${LOGGEDIN_SUCCESS}    	Logged in as ${VALID_NAME}
 
 Check User Can Create A Password
     Input Password    ${PASSWORD_FIELD_ID}     ${PASSWORD_VALUE}

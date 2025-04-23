@@ -23,7 +23,7 @@ ${SUBMIT_FORM}    //input[@name="submit"]
 Verify User Can Submit Contact Us Form
     [Tags]  UI_tests_Part1
     [Teardown]  Remove File From Resources    ${FILE_NAME}
-    Check User Is Redirected To The Selected Page    ${HEADER_LOCATOR_CONTACT_US}    GET IN TOUCH
+    Check Relevant Text Is Displayed    ${HEADER_LOCATOR_CONTACT_US}    GET IN TOUCH
     Input And Verify Text Field    ${NAME_FIELD_ID}    Eva
     Input And Verify Text Field    ${EMAIL_CONTACT_ID}    ${VALID_EMAIL}
     Input And Verify Text Field    ${SUBJECT_FILED_ID}    Test subject
@@ -35,7 +35,7 @@ Verify User Can Submit Contact Us Form
     Element Should Be Visible    ${SUBMIT_FORM}
     Click Button      ${SUBMIT_FORM}
     Handle Alert
-    Check Expected Notifications    ${SUCCESS_SNACKBAR}    ${SUCCESS_SUBMITION}
+    Check Relevant Text Is Displayed    ${SUCCESS_SNACKBAR}    ${SUCCESS_SUBMITION}
 
 
 
