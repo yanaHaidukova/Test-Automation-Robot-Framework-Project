@@ -6,9 +6,9 @@ Resource     ../resources/common_resources.robot
 
 *** Variables ***
 ${NAME_FIELD_ID}    //input[@name="name"]
-${VALID_NAME}    Lora
+${VALID_NAME}    Monika
 ${EMAIL_FIELD_ID}    //input[@name="email"][@data-qa="signup-email"]
-${VALID_EMAIL}    loratestemail@gmail.com
+${VALID_EMAIL}    Monikatestemail@gmail.com
 ${DAY_DROPDOWN}    //*[@id="days"]
 ${MONTH_DROPDOWN}    //*[@id="months"]
 ${YEAR_DROPDOWN}    //*[@id="years"]
@@ -26,7 +26,6 @@ ${VALIDATION_EXISTING_USER}    //*[@id="form"]//p
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${LOGGEDIN_SUCCESS}    //*[@id="header"]//li[10]/a
 ${PASSWORD_FIELD_ID}    //*[@id="password"]
-${PASSWORD_VALUE}    PASSWORD123
 ${FIRST_NAME_ID}    //*[@id="first_name"]
 ${LAST_NAME_ID}    //*[@id="last_name"]
 ${COMPANY_NAME_ID}    //*[@id="company"]
@@ -44,7 +43,7 @@ Check Usen Can Log In With Valid Credentials
     Input Text    ${EMAIL_FIELD_LOGIN_ID}   ${email}
     Input Text    ${INPUT_PASSWORD}    ${password}
     Click Button  ${LOGIN_BUTTON_ID}
-    Check Relevant Text Is Displayed    ${LOGGEDIN_SUCCESS}    	Logged in as ${VALID_NAME}
+    Check Relevant Text Is Displayed    ${LOGGEDIN_SUCCESS}    	Logged in as ${username}
 
 Check User Can Create A Password
     Input Password    ${PASSWORD_FIELD_ID}     ${PASSWORD_VALUE}
@@ -52,24 +51,26 @@ Check User Can Create A Password
     Should Not Be Empty    ${pass_created}
 
 Check User Can Enter Account Information
+    [Arguments]    ${name}   ${email}
     Select And Validate Radio Button    title    Mr
-    Textfield Should Contain   ${NAME_FIELD_POPULATED}    ${VALID_NAME}
-    Textfield Should Contain     ${EMAIL_FIELD_POPULATED}    ${VALID_EMAIL}
+    Textfield Should Contain   ${NAME_FIELD_POPULATED}    ${name}
+    Textfield Should Contain     ${EMAIL_FIELD_POPULATED}    ${email}
     Check User Can Create A Password
     Select Option From Drop Down    ${DAY_DROPDOWN}    1
     Select Option From Drop Down    ${MONTH_DROPDOWN}    4
     Select Option From Drop Down    ${YEAR_DROPDOWN}     1999
 
 Check User Can Enter Address Information
-    Input And Verify Text Field    ${FIRST_NAME_ID}    ${VALID_NAME}
-    Input And Verify Text Field    ${LAST_NAME_ID}    Patison
-    Input And Verify Text Field    ${COMPANY_NAME_ID}    SoftServe
-    Input And Verify Text Field    ${ADDRESS1_ID}    Test address 1
-    Input And Verify Text Field    ${ADDRESS2_ID}    Test address 2
-    Select Option From Drop Down    ${COUNTRY_DROPDOWN_ID}    Canada
-    Input And Verify Text Field    ${STATE_ID}    Ontario
-    Input And Verify Text Field    ${CITY_ID}    Toronto
-    Input And Verify Text Field    ${ZIPCODE_ID}    123456
-    Input And Verify Text Field    ${MOBILE_NUMBER_ID}    +12505550199
+    [Arguments]    ${name}    ${last_name}    ${company}    ${address1}    ${address2}   ${country}    ${state}    ${city}    ${zip_code}    ${phone}
+    Input And Verify Text Field    ${FIRST_NAME_ID}    ${name}
+    Input And Verify Text Field    ${LAST_NAME_ID}   ${last_name}
+    Input And Verify Text Field    ${COMPANY_NAME_ID}     ${company}
+    Input And Verify Text Field    ${ADDRESS1_ID}   ${address1}
+    Input And Verify Text Field    ${ADDRESS2_ID}     ${address2}
+    Select Option From Drop Down    ${COUNTRY_DROPDOWN_ID}    ${country}
+    Input And Verify Text Field    ${STATE_ID}    ${state}
+    Input And Verify Text Field    ${CITY_ID}     ${city}
+    Input And Verify Text Field    ${ZIPCODE_ID}    ${zip_code}
+    Input And Verify Text Field    ${MOBILE_NUMBER_ID}     ${phone}
 
 

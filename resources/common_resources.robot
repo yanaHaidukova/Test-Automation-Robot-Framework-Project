@@ -3,6 +3,7 @@ Library      SeleniumLibrary
 Resource    ../resources/login.robot
 Resource    ../resources/contact_us.robot
 Resource    ../resources/products.robot
+Resource    ../resources/variables.robot
 
 *** Variables ***
 ${EMAIL_FIELD_LOGIN_ID}    //input[@name="email"][@data-qa="login-email"]
@@ -15,35 +16,58 @@ ${HEADER_LOCATOR_DELETED}    //*[text()= 'Account Deleted!']
 ${UPLOAD_FILE_LOCATOR}    //input[@name="upload_file"]
 ${VALIDATION_INVALID_CRED}    //*[@id="form"]//p
 ${INPUT_PASSWORD}    //input[@type="password"]
-${HOME_PAGE_LINK}    https://automationexercise.com
-${BROWSER}    headlesschrome
 ${HOME_CAROUSEL}    //*[@id="slider-carousel"]
 ${HEADER_LOCATOR_NEW_SIGNIN}    //*[@class="signup-form"]//h2
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
 ${SIGNUP_LOGIN_LINK}    //*[@id="header"]//a[@href="/login"]
 ${HEADER_LOCATOR_LOGIN}    //*[@class="login-form"]//h2
-${SIGNUP_BUTTON}    //button[@type="submit"][@data-qa="signup-button"]
 ${LOGGEDIN_SUCCESS}     //*[@id="header"]//li[10]/a
 ${DELETE_ACCOUNT_LINK}    //a[contains (text(), 'Delete Account')]
 ${RADIO_BUTTON_XPATH_TEMPLATE}    //input[@name='{name}'][@value='{value}']
+${ADD_ITEM_TO_CART}    //a[@data-product-id="{product_id}"]
+${MODAL_ADDED_CART}    //*[@class="modal-body"]/p[1]
+${CONTINUE_SHOPPING}    //button[text()= 'Continue Shopping']
+${VIEW_PRODUCT}    //a[@href="/product_details/'{product_id}'"]
+${AD_CLOSE_BUTTON}    //*[@class='grippy-host']
 
 *** Keywords ***
+Close Advertisement If Present
+    [Arguments]    ${close_button_locator}
+    ${status}    ${message}=  Run Keyword And Ignore Error    Wait Until Element Is Visible    ${close_button_locator}    timeout=15s
+    Run Keyword If    '${status}' == 'PASS'    Click Element    ${close_button_locator}
+
 Go To Automation Exercise Home Page
-    Open Browser    ${HOME_PAGE_LINK}       ${BROWSER}
-    ${status}    ${message}=    Run Keyword And Ignore Error    Wait Until Element Is Visible    ${CONFIRM_COOKIES}    timeout=10s
-    Run Keyword If    '${status}' == 'PASS'    Click Element    ${CONFIRM_COOKIES}
+    Open Browser    ${HOME_PAGE_LINK}      ${BROWSER}
+    Close Advertisement If Present    ${CONFIRM_COOKIES}
     Wait Until Page Contains Element    ${HOME_CAROUSEL}
 
 Go To Required Link
-    [Arguments]    ${required_link}
+    [Arguments]    ${required_link}    ${text_locator}    ${expected_text}
     Go To Automation Exercise Home Page
     Click Link    ${required_link}
+    Check Relevant Text Is Displayed    ${text_locator}    ${expected_text}
 
 Check Relevant Text Is Displayed
     [Arguments]   ${text_locator}   ${expected_text}
     Wait Until Element Is Visible    ${text_locator}
     ${actual_text}=  Get Text    ${text_locator}
     Should Be Equal As Strings    ${actual_text}   ${expected_text}
+
+Register User With New Name And Email
+    [Arguments]    ${name}    ${email}    ${registration_locator}    ${registration_status}
+    Input And Verify Text Field    ${NAME_FIELD_ID}    ${name}
+    Input And Verify Text Field    ${EMAIL_FIELD_ID}    ${email}
+    Click Button    ${SIGNUP_BUTTON}
+    Check Relevant Text Is Displayed    ${registration_locator}    ${registration_status}
+    Check User Can Enter Account Information    ${name}    ${email}
+    Scroll Element Into View    ${COMPANY_NAME_ID}
+    Wait Until Element Is Visible    ${SIGNUP_CHECKBOX}
+    Check User Can Select A Checkbox    ${SIGNUP_CHECKBOX}
+    Check User Can Enter Address Information    @{ADDRESS_INFORMATION}
+    Click Button    ${CREATE_ACCOUNT_BUTTON}
+    Wait Until Element Is Visible      ${ACCOUNT_CREATED_ID}
+    Click Link    ${CONTINUE_BUTTON_ID}
+    Element Should Contain    ${LOGGEDIN_SUCCESS}    ${name}
 
 Check User Can Select A Checkbox
     [Arguments]   ${checkbox_locator}
@@ -58,13 +82,13 @@ Select Option From Drop Down
     Should Be Equal    ${value_selected}    ${drop_down_value}
 
 Login And Delete Account
+    [Arguments]    ${email}    ${password}   ${name}
     Open Browser    ${HOME_PAGE_LINK}    ${BROWSER}
-    ${status}    ${message}=    Run Keyword And Ignore Error    Wait Until Element Is Visible    ${CONFIRM_COOKIES}    timeout=10s
-    Run Keyword If    '${status}' == 'PASS'    Click Element    ${CONFIRM_COOKIES}
+    Close Advertisement If Present    ${CONFIRM_COOKIES}
     Wait Until Page Contains Element    ${HOME_CAROUSEL}
     Click Link    ${SIGNUP_LOGIN_LINK}
     Wait Until Element Is Visible    ${HEADER_LOCATOR_NEW_SIGNIN}
-    Check Usen Can Log In With Valid Credentials    ${VALID_EMAIL}    ${PASSWORD_VALUE}   ${VALID_NAME}    ${LOGGEDIN_SUCCESS}
+    Check Usen Can Log In With Valid Credentials    ${email}    ${password}   ${name}    ${LOGGEDIN_SUCCESS}
     Click Link    ${DELETE_ACCOUNT_LINK}
     Wait Until Element Is Visible    ${HEADER_LOCATOR_DELETED}
     Close All Browsers
@@ -94,6 +118,18 @@ Select And Validate Radio Button
     ${radio_button_locator}=  Replace String    ${radio_button_locator}    {value}    ${value}
     Click Element    ${radio_button_locator}
     Element Attribute Value Should Be    ${radio_button_locator}    checked    true
+
+Check User Can Add Product To Cart
+    [Arguments]    ${product_locator}    ${product_id}
+    ${product_locator}=  Replace String    ${VIEW_PRODUCT}    {product_id}    ${product_id}
+    Scroll Element Into View    ${product_locator}
+    Element Should Be Visible    ${product_locator}
+    Mouse Over    ${product_locator}
+    ${add_to_cart_locator}=  Replace String    ${ADD_ITEM_TO_CART}    {product_id}    ${product_id}
+    Close Advertisement If Present    ${AD_CLOSE_BUTTON}
+    Wait Until Element Is Visible    ${add_to_cart_locator}
+    Click Link    ${add_to_cart_locator}
+    Check Relevant Text Is Displayed    ${MODAL_ADDED_CART}    Your product has been added to cart.
 
 
 

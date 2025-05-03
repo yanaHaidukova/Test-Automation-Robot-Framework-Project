@@ -1,6 +1,5 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
-Test Setup    Go To Required Link    ${TEST_CASES_LINK}
 Test Teardown   Close All Browsers
 
 *** Variables ***
@@ -10,4 +9,4 @@ ${TEST_CASES_LINK}    //*[@id="header"]//a[@href="/test_cases"]
 *** Test Cases ***
 Verify Test Cases Page
     [Tags]  UI_tests_Part1
-    Check Relevant Text Is Displayed    ${HEADER_TEST_CASES_LOCATOR}    TEST CASES
+    Go To Required Link    ${TEST_CASES_LINK}    ${HEADER_TEST_CASES_LOCATOR}    TEST CASES
