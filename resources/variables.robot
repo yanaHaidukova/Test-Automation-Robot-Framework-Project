@@ -16,4 +16,4 @@ ${CREATE_ACCOUNT_BUTTON}    //button[@type="submit"][@data-qa="create-account"]
 ${ACCOUNT_CREATED_ID}    //*[@id="form"]//h2[@data-qa="account-created"]
 ${SIGNUP_BUTTON}    //button[@type="submit"][@data-qa="signup-button"]
 ${PASSWORD_VALUE}    PASSWORD123
-@{ADDRESS_INFORMATION}    Lora    Patison    SoftServe    Test address 1    Test address 2    Canada    Ontario    Toronto    123456     +1250555019
+@{ADDRESS_INFORMATION}    Monika    Patison    SoftServe    Test address 1    Test address 2    Canada    Ontario    Toronto    123456     +12505550199

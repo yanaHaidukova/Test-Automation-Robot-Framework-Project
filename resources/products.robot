@@ -1,6 +1,7 @@
 *** Settings ***
 Library      SeleniumLibrary
 Library    String
+Resource    ../resources/common_resources.robot
 
 *** Variables ***
 ${SEARCH_BUTTON}    //*[@id="submit_search"]
@@ -15,7 +16,7 @@ ${ADDRESS2}    //*[@class="address item box"]//li[5]
 ${ADDRESS_CITY_STATE_ZIP}    //li[contains(@class,'address_city') and contains(@class,'address_state_name') and contains(@class,'address_postcode')]
 ${ADDRESS_COUNTRY}    //li[contains(@class,'address_country_name')]
 ${ADDRESS_PHONE}    //li[contains(@class,'address_phone')]
-${EXPECTED_NAME}    Mr. Lora Patison
+${EXPECTED_NAME}    Mr. Monika Patison
 ${EXPECTED_COMPANY}    SoftServe
 ${EXPECTED_ADDRESS1}    Test address 1
 ${EXPECTED_ADDRESS2}    Test address 2
@@ -23,6 +24,11 @@ ${EXPECTED_CITY_STATE_ZIP}    Toronto Ontario 123456
 ${EXPECTED_COUNTRY}    Canada
 ${EXPECTED_PHONE}    +12505550199
 ${YOUR_DELIVERY_INFO}    //*[@id="address_delivery"]
+${CARD_NAME}    //*[@name="name_on_card"]
+${CARD_NUMBER}    //*[@name="card_number"]
+${CVC}    //*[@name="cvc"]
+${EXPIRATION_MONTH}    //*[@name="expiry_month"]
+${EXPIRATION_YEAR}    //*[@name="expiry_year"]
 
 *** Keywords ***
 Check Search Results
@@ -45,47 +51,25 @@ Check Product Details In The Cart
 Check Product Attributes
     [Arguments]    ${product_id}    ${cart_item_template}    ${attribute}     ${expected_value}
     ${attribute_value}=  Replace String    ${attribute}    {product_id}    ${product_id}
-    ${attribute_value}=  Get Text    ${attribute_value}
-    Should Be Equal As Strings    ${attribute_value}    ${expected_value}
+    Check Relevant Text Is Displayed    ${attribute_value}    ${expected_value}
 
-Get All Address List Items
-    [Arguments]    ${address_container}
-    ${address_items}=    Get WebElements    ${address_container}//li
-    [Return]    ${address_items}
+Check Product Is Displayed In The Cart
+    [Arguments]    ${product_locator}    ${product_id}
+    ${added_product}=     Replace String    ${product_locator}    {product_id}    ${product_id}
+    Element Should Be Visible    ${added_product}
 
-Verify Address Section Contains All Expected Elements
-    [Arguments]    ${address_container}
-    Element Should Be Visible    ${address_container}${ADDRESS_FIRST_LAST_NAME}
-    Element Should Be Visible    ${address_container}${ADDRESS_COMPANY}
-    Element Should Be Visible    ${address_container}${ADDRESS_CITY_STATE_ZIP}
-    Element Should Be Visible    ${address_container}${ADDRESS_COUNTRY}
-    Element Should Be Visible    ${address_container}${ADDRESS_PHONE}
+Check Address Details During Checkout
+    [Arguments]    ${address_containter}
+    Wait Until Element Is Visible    ${address_containter}
+    Check Relevant Text Is Displayed    ${address_containter}${ADDRESS_FIRST_LAST_NAME}    ${EXPECTED_NAME}
+    Check Relevant Text Is Displayed    ${address_containter}${ADDRESS_COMPANY}    ${EXPECTED_COMPANY}
+    Check Relevant Text Is Displayed    ${address_containter}${ADDRESS_CITY_STATE_ZIP}    ${EXPECTED_CITY_STATE_ZIP}
+    Check Relevant Text Is Displayed    ${address_containter}${ADDRESS_COUNTRY}    ${EXPECTED_COUNTRY}
+    Check Relevant Text Is Displayed    ${address_containter}${ADDRESS_PHONE}    ${EXPECTED_PHONE}
 
-Verify Delivery Address Elements Exist
-    Wait Until Element Is Visible    ${YOUR_DELIVERY_INFO}    timeout=10s
-    Verify Address Section Contains All Expected Elements    ${YOUR_DELIVERY_INFO}
-    # Count address list items to ensure all expected fields are present
-    ${address_items}=    Get All Address List Items    ${YOUR_DELIVERY_INFO}
-    ${count}=    Get Element Count    ${YOUR_DELIVERY_INFO}//li
-    Should Be True    ${count} >= 7    Expected at least 7 address elements but found ${count}
-
-Verify Delivery Address Content Item By Item
-    # Verify name
-    ${name_text}=    Get Text    ${YOUR_DELIVERY_INFO}${ADDRESS_FIRST_LAST_NAME}
-    Should Contain    ${name_text}    ${EXPECTED_NAME}
-
-    # Verify company/address
-    ${company_text}=    Get Text    ${YOUR_DELIVERY_INFO}${ADDRESS_COMPANY}
-    Should Contain    ${company_text}    ${EXPECTED_COMPANY}
-
-    # Verify city, state, zip
-    ${city_state_zip_text}=    Get Text    ${YOUR_DELIVERY_INFO}${ADDRESS_CITY_STATE_ZIP}
-    Should Be Equal    ${city_state_zip_text}    ${EXPECTED_CITY_STATE_ZIP}
-
-    # Verify country
-    ${country_text}=    Get Text    ${YOUR_DELIVERY_INFO}${ADDRESS_COUNTRY}
-    Should Be Equal    ${country_text}    ${EXPECTED_COUNTRY}
-
-    # Verify phone
-    ${phone_text}=    Get Text    ${YOUR_DELIVERY_INFO}${ADDRESS_PHONE}
-    Should Contain    ${phone_text}    ${EXPECTED_PHONE}
+Fill In Payment Details
+    Input And Verify Text Field    ${CARD_NAME}    ${VALID_NAME}
+    Input And Verify Text Field    ${CARD_NUMBER}    0000111122223333
+    Input And Verify Text Field    ${CVC}    123
+    Input And Verify Text Field    ${EXPIRATION_MONTH}    08
+    Input And Verify Text Field    ${EXPIRATION_YEAR}    2028

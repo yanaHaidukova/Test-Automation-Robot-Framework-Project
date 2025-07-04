@@ -15,7 +15,6 @@ ${CART_PAGE}    //li[text()= 'Shopping Cart']
 *** Test Cases ***
 Verify User Can Subsribe To Receive Notifications
     [Tags]  UI_tests_Part1
-    [Setup]  Go To Automation Exercise Home Page
     Scroll Element Into View    ${FOOTER_LOCATOR}
     Input And Verify Text Field    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
     Click Button    ${SUBSCRIBE_BUTTON}
@@ -23,8 +22,7 @@ Verify User Can Subsribe To Receive Notifications
 
 Verify User Can Subscribe From Cart Page
     [Tags]  UI_tests_Part2
-    [Setup]  Go To Required Link    ${CART_LINK}
-    Check Relevant Text Is Displayed    ${CART_PAGE}    Shopping Cart
+    Go To Required Link    ${CART_LINK}    ${CART_PAGE}    Shopping Cart
     Scroll Element Into View    ${FOOTER_LOCATOR}
     Input And Verify Text Field    ${EMAIL_FIELD_SUBSCRIBE_ID}    ${LOGGED_IN_USER_EMAIL}
     Click Button    ${SUBSCRIBE_BUTTON}

@@ -31,20 +31,30 @@ ${VIEW_PRODUCT}    //a[@href="/product_details/'{product_id}'"]
 ${AD_CLOSE_BUTTON}    //*[@class='grippy-host']
 
 *** Keywords ***
-Close Advertisement If Present
+Confirm Cookies If Present
     [Arguments]    ${close_button_locator}
-    ${status}    ${message}=  Run Keyword And Ignore Error    Wait Until Element Is Visible    ${close_button_locator}    timeout=15s
+    ${status}    ${message}=  Run Keyword And Ignore Error    Wait Until Element Is Visible    ${close_button_locator}
     Run Keyword If    '${status}' == 'PASS'    Click Element    ${close_button_locator}
+
+Close Advertisement If Present
+    ${ads_visible}=   Execute JavaScript    var e = document.querySelector('#aswift_3_host'); return e && e.offsetParent !== null;
+    Run Keyword If    ${ads_visible}    Run Keyword And Ignore Error    Execute JavaScript    document.querySelector('.grippy-host').click();
+
+Scroll Page And Close Advertisement
+    [Arguments]    ${expected_locator}
+    Scroll Element Into View    ${expected_locator}
+    Close Advertisement If Present
 
 Go To Automation Exercise Home Page
     Open Browser    ${HOME_PAGE_LINK}      ${BROWSER}
-    Close Advertisement If Present    ${CONFIRM_COOKIES}
+    Confirm Cookies If Present    ${CONFIRM_COOKIES}
     Wait Until Page Contains Element    ${HOME_CAROUSEL}
 
 Go To Required Link
     [Arguments]    ${required_link}    ${text_locator}    ${expected_text}
-    Go To Automation Exercise Home Page
     Click Link    ${required_link}
+    Confirm Cookies If Present    ${CONFIRM_COOKIES}
+    Close Advertisement If Present
     Check Relevant Text Is Displayed    ${text_locator}    ${expected_text}
 
 Check Relevant Text Is Displayed
@@ -84,7 +94,7 @@ Select Option From Drop Down
 Login And Delete Account
     [Arguments]    ${email}    ${password}   ${name}
     Open Browser    ${HOME_PAGE_LINK}    ${BROWSER}
-    Close Advertisement If Present    ${CONFIRM_COOKIES}
+    Confirm Cookies If Present    ${CONFIRM_COOKIES}
     Wait Until Page Contains Element    ${HOME_CAROUSEL}
     Click Link    ${SIGNUP_LOGIN_LINK}
     Wait Until Element Is Visible    ${HEADER_LOCATOR_NEW_SIGNIN}
@@ -120,16 +130,17 @@ Select And Validate Radio Button
     Element Attribute Value Should Be    ${radio_button_locator}    checked    true
 
 Check User Can Add Product To Cart
-    [Arguments]    ${product_locator}    ${product_id}
+    [Arguments]    ${product_locator}    ${product_id}    ${added_product_id}
     ${product_locator}=  Replace String    ${VIEW_PRODUCT}    {product_id}    ${product_id}
     Scroll Element Into View    ${product_locator}
     Element Should Be Visible    ${product_locator}
     Mouse Over    ${product_locator}
     ${add_to_cart_locator}=  Replace String    ${ADD_ITEM_TO_CART}    {product_id}    ${product_id}
-    Close Advertisement If Present    ${AD_CLOSE_BUTTON}
     Wait Until Element Is Visible    ${add_to_cart_locator}
     Click Link    ${add_to_cart_locator}
     Check Relevant Text Is Displayed    ${MODAL_ADDED_CART}    Your product has been added to cart.
-
+    ${added_product}=    Set Variable    product-${product_id}
+    Set Test Variable    ${ADDED_PRODUCT_ID}    ${added_product}
+    [Return]    ${ADDED_PRODUCT_ID}
 
 

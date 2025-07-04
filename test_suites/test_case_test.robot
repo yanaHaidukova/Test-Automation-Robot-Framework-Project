@@ -1,5 +1,6 @@
 *** Settings ***
 Resource    ../resources/common_resources.robot
+Test Setup    Go To Automation Exercise Home Page
 Test Teardown   Close All Browsers
 
 *** Variables ***
